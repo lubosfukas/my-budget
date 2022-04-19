@@ -1,0 +1,66 @@
+# My budget
+
+Frontend part application of the budget application in React.
+
+-   [File structure](#file-structure)
+-   [Installation](#installation)
+-   [Development](#development)
+-   [Built with](#built-with)
+
+## File structure
+
+```text
+src
+├── components          # Feature first grouped components
+├── hooks               # Hooks used across whole application
+├── pages               # Top level views
+├── utils               # Tools and utilities
+```
+
+## Installation
+
+Install latest LTS version of [Node](https://nodejs.org/en/).
+
+Install latest version of yarn.
+
+```bash
+npm install -g yarn
+```
+
+Install dependencies.
+
+```bash
+yarn install
+```
+
+Start the project.
+
+```bash
+yarn dev
+```
+
+## Development
+
+Preferably in Visual Studio Code. Commits are written in [Conventional Commits](https://www.conventionalcommits.org/).
+
+Scripts
+
+```bash
+yarn
+yarn install
+yarn dev
+yarn preview
+yarn build
+```
+
+Build with
+
+```bash
+yarn build
+```
+
+## Built with
+
+[React](https://reactjs.org/)
+
+[Vite](https://vitejs.dev/)
