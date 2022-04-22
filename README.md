@@ -27,6 +27,8 @@ Install the latest version of yarn.
 npm install -g yarn
 ```
 
+Install recommended extensions.
+
 Install dependencies.
 
 ```bash
@@ -41,7 +43,7 @@ yarn dev
 
 ## Development
 
-Preferably in Visual Studio Code with [Airbnb style guide](https://github.com/airbnb/javascript) Commits are written in [Conventional Commits](https://www.conventionalcommits.org/).
+Preferably in Visual Studio Code with [Airbnb style guide](https://github.com/airbnb/javascript). Commits are written in [Conventional Commits](https://www.conventionalcommits.org/).
 
 Scripts
 
@@ -51,6 +53,8 @@ yarn install
 yarn dev
 yarn preview
 yarn build
+yarn lint
+yarn lint:fix
 ```
 
 Build with
