@@ -19,9 +19,9 @@ src
 
 ## Installation
 
-Install latest LTS version of [Node](https://nodejs.org/en/).
+Install the latest LTS version of [Node](https://nodejs.org/en/).
 
-Install latest version of yarn.
+Install the latest version of yarn.
 
 ```bash
 npm install -g yarn
@@ -33,7 +33,7 @@ Install dependencies.
 yarn install
 ```
 
-Start the project.
+Start the application.
 
 ```bash
 yarn dev
@@ -41,7 +41,7 @@ yarn dev
 
 ## Development
 
-Preferably in Visual Studio Code. Commits are written in [Conventional Commits](https://www.conventionalcommits.org/).
+Preferably in Visual Studio Code with [Airbnb style guide](https://github.com/airbnb/javascript) Commits are written in [Conventional Commits](https://www.conventionalcommits.org/). 
 
 Scripts
 
