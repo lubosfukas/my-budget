@@ -15,8 +15,6 @@ module.exports = {
   },
   plugins: ["react", "@typescript-eslint"],
   rules: {
-    // supress errors for expected linebreaks
-    "linebreak-style": ["error", "windows"],
     // suppress errors for missing 'import React' in files
     "react/react-in-jsx-scope": "off",
     // supress errors for not allowed files with extension
