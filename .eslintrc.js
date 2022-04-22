@@ -15,7 +15,9 @@ module.exports = {
   },
   plugins: ["react", "@typescript-eslint"],
   rules: {
-    // suppress errors for missing 'import React' in files
+    // supress errors for the use of dev packages
+    "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
+    // supress errors for missing 'import React' in files
     "react/react-in-jsx-scope": "off",
     // supress errors for not allowed files with extension
     "react/jsx-filename-extension": [
