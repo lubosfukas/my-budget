@@ -2,10 +2,10 @@
 
 Frontend part application of the budget application in React.
 
--   [File structure](#file-structure)
--   [Installation](#installation)
--   [Development](#development)
--   [Built with](#built-with)
+- [File structure](#file-structure)
+- [Installation](#installation)
+- [Development](#development)
+- [Built with](#built-with)
 
 ## File structure
 
@@ -41,7 +41,7 @@ yarn dev
 
 ## Development
 
-Preferably in Visual Studio Code with [Airbnb style guide](https://github.com/airbnb/javascript) Commits are written in [Conventional Commits](https://www.conventionalcommits.org/). 
+Preferably in Visual Studio Code with [Airbnb style guide](https://github.com/airbnb/javascript) Commits are written in [Conventional Commits](https://www.conventionalcommits.org/).
 
 Scripts
 
