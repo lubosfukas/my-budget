@@ -13,7 +13,7 @@ module.exports = {
     {
       files: ["*.ts", "*.tsx"], // Your TypeScript files extension
 
-      // Instead of extending TypeScript plugins outside the `overrides`. You should extend them here.
+      // Instead of extending TypeScript plugins outside the `overrides`, you should extend them here.
       // If you don't want to extend any rules, you don't need an `extends` attribute.
       extends: [
         "plugin:@typescript-eslint/recommended",
