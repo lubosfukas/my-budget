@@ -9,23 +9,10 @@ module.exports = {
     "plugin:react/recommended",
     "prettier",
   ],
-  overrides: [
-    {
-      files: ["*.ts", "*.tsx"], // Your TypeScript files extension
-
-      // Instead of extending TypeScript plugins outside the `overrides`, you should extend them here.
-      // If you don't want to extend any rules, you don't need an `extends` attribute.
-      extends: [
-        "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",
-      ],
-
-      parserOptions: {
-        project: ["./tsconfig.eslint.json"], // Specify it only for TypeScript files
-      },
-    },
-  ],
   parser: "@typescript-eslint/parser",
+  parserOptions: {
+    project: ["./tsconfig.eslint.json"],
+  },
   plugins: ["react", "@typescript-eslint"],
   rules: {
     // supress errors for the use of dev packages
