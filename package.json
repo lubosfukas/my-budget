@@ -6,8 +6,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx,.json src/",
+    "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx,.json src/"
   },
   "dependencies": {
     "antd": "4.20.0",
