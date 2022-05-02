@@ -1,12 +1,7 @@
-import { Dashboard } from "./pages";
-import { Layout } from "./components";
+import { Router } from "./Router";
 
 import "antd/dist/antd.css";
 
-const App = () => (
-  <Layout>
-    <Dashboard />
-  </Layout>
-);
+const App = () => <Router />;
 
 export default App;

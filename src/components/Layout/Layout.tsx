@@ -1,4 +1,5 @@
 import { Layout as LayoutAntd } from "antd";
+import { Outlet } from "react-router-dom";
 import { useState } from "react";
 
 import { Header } from "./Header";
@@ -7,7 +8,7 @@ import { Sider } from "./Sider";
 
 const { Content, Footer } = LayoutAntd;
 
-export const Layout = ({ children }: { children: JSX.Element }) => {
+export const Layout = () => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -16,7 +17,9 @@ export const Layout = ({ children }: { children: JSX.Element }) => {
         <Sider />
         <LayoutAntd>
           <Header onClick={() => setOpen(true)} />
-          <Content style={{ padding: "24px 50px", margin: 0 }}>{children}</Content>
+          <Content style={{ padding: "24px 50px", margin: 0 }}>
+            <Outlet />
+          </Content>
           <Footer style={{ textAlign: "center" }}>My budget ©2022 Created by Lubos Fukas</Footer>
         </LayoutAntd>
       </LayoutAntd>
