@@ -16,8 +16,9 @@ module.exports = {
       2,
       { namedComponents: "arrow-function", unnamedComponents: "arrow-function" },
     ],
-    "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": [2, { extensions: [".js", ".jsx", ".ts", ".tsx"] }],
+    "react/react-in-jsx-scope": "off",
+    "react/require-default-props": [0],
     "sort-imports": [
       "error",
       {
