@@ -1,5 +1,8 @@
 import { Table } from "antd";
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
+import { ACCOUNT_KEY } from "../utils/constants";
 import { Box } from "../components";
 
 const columns = [
@@ -41,8 +44,17 @@ const data = [
   },
 ];
 
-export const Dashboard = () => (
-  <Box>
-    <Table columns={columns} dataSource={data} />
-  </Box>
-);
+export const Dashboard = () => {
+  const [searchParams] = useSearchParams();
+  const account = searchParams.get(ACCOUNT_KEY) ?? undefined;
+
+  useEffect(() => {
+    document.title = account ? `${account.toLocaleUpperCase()} - Dashboard` : "Dashboard";
+  });
+
+  return (
+    <Box>
+      <Table columns={columns} dataSource={data} />
+    </Box>
+  );
+};
