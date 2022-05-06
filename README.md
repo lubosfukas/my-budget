@@ -74,3 +74,5 @@ yarn build
 [Less](https://lesscss.org/)
 
 [React Router](https://reactrouter.com/)
+
+[React Query](https://react-query.tanstack.com/)
