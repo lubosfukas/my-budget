@@ -76,3 +76,5 @@ yarn build
 [React Router](https://reactrouter.com/)
 
 [React Query](https://react-query.tanstack.com/)
+
+[Mock Service Worker](https://mswjs.io/)
