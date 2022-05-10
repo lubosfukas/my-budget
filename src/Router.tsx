@@ -6,7 +6,7 @@ import { Dashboard } from "./pages";
 export const Router = () => (
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Navigate to={{ pathname: "/dashboard", search: "?account=visa&period=day" }} />} />
+      <Route path="/" element={<Navigate to={{ pathname: "/dashboard", search: "?account=visa&period=date" }} />} />
       <Route path="/dashboard" element={<Layout />}>
         <Route index element={<Dashboard />} />
       </Route>
