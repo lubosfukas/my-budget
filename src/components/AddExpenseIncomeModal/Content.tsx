@@ -5,14 +5,16 @@ import { Category } from "../../types";
 
 const { Option } = Select;
 
+export type CategoryName = Pick<Category, "name">;
+
 type Props = {
   balance: number;
   categories: Array<Category>;
-  category: string;
+  category: CategoryName | undefined;
   date: Date;
   note: string;
   setBalance: (newValue: number) => void;
-  setCategory: (newValue: string) => void;
+  setCategory: (newValue: CategoryName) => void;
   setDate: (newValue: Date) => void;
   setNote: (newValue: string) => void;
 };
@@ -64,8 +66,10 @@ export const Content = ({
         value={category}
         style={{ width: "100%" }}
       >
-        {categories.map(({ key, label }) => (
-          <Option key={key}>{label}</Option>
+        {categories.map(({ id, label, name }) => (
+          <Option key={id} value={name}>
+            {label}
+          </Option>
         ))}
       </Select>
     </Col>

@@ -17,13 +17,14 @@ export const AddTransferModal = ({ accounts, visible, onClose }: Props) => {
   const [date, setDate] = useState(new Date());
   const [balance, setBalance] = useState(0);
   const [note, setNote] = useState("");
-  const [from, setFrom] = useState(accounts[0].key);
-  const [to, setTo] = useState(accounts[1].key);
+  const [from, setFrom] = useState(accounts[0].name);
+  const [to, setTo] = useState(accounts[1].name);
 
   return (
     <Modal
       centered
       destroyOnClose
+      okButtonProps={{ disabled: balance === 0 || from === to }}
       okText="Add"
       title="Add transfer"
       visible={visible}
@@ -62,14 +63,18 @@ export const AddTransferModal = ({ accounts, visible, onClose }: Props) => {
         </Col>
         <Col span={24} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Select bordered={false} value={from} onChange={(newValue) => setFrom(newValue)}>
-            {accounts.map(({ key, label }) => (
-              <Option key={key}>{label}</Option>
+            {accounts.map(({ id, label, name }) => (
+              <Option key={id} value={name}>
+                {label}
+              </Option>
             ))}
           </Select>
           <ArrowRightOutlined />
           <Select bordered={false} value={to} onChange={(newValue) => setTo(newValue)}>
-            {accounts.map(({ key, label }) => (
-              <Option key={key}>{label}</Option>
+            {accounts.map(({ id, label, name }) => (
+              <Option key={id} value={name}>
+                {label}
+              </Option>
             ))}
           </Select>
         </Col>

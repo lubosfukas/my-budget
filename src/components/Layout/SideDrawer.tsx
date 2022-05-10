@@ -1,49 +1,42 @@
 import { CreditCardOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { Drawer, Menu, Space } from "antd";
 
+import { groupBy, toCamelCase } from "./utils";
+import { useFetchAccountsAndCategories } from "../../hooks";
+
 type Props = { open: boolean; onClose: () => void };
 
-const items = [
-  {
-    key: "categories",
-    label: "Categories",
-    icon: <UnorderedListOutlined />,
-    children: [
-      {
-        key: "entertainment",
-        label: "Entertainment",
-      },
-      {
-        key: "housing",
-        label: "Housing",
-      },
-      {
-        key: "transportation",
-        label: "Transportation",
-      },
-    ],
-  },
-  {
-    key: "accounts",
-    label: "Accounts",
-    icon: <CreditCardOutlined />,
-    children: [
-      {
-        key: "visa",
-        label: "Visa",
-      },
-      {
-        key: "cash",
-        label: "Cash",
-      },
-    ],
-  },
-];
+export const SideDrawer = ({ open, onClose }: Props) => {
+  const [{ data: accounts = [] }, { data: categories = [] }] = useFetchAccountsAndCategories();
 
-export const SideDrawer = ({ open, onClose }: Props) => (
-  <Drawer onClose={onClose} placement="right" visible={open}>
-    <Space direction="vertical" style={{ width: "100%", padding: 0 }}>
-      <Menu mode="inline" selectable={false} items={items} />
-    </Space>
-  </Drawer>
-);
+  const groupedCategories = groupBy(categories, ({ type }) => type);
+
+  return (
+    <Drawer onClose={onClose} placement="right" visible={open}>
+      <Space direction="vertical" style={{ width: "100%", padding: 0 }}>
+        <Menu
+          selectable={false}
+          items={[
+            {
+              key: "categories",
+              label: "Categories",
+              icon: <UnorderedListOutlined />,
+              children: Object.keys(groupedCategories).map((key) => ({
+                key: toCamelCase(key),
+                label: key.toUpperCase(),
+                children: groupedCategories[key].map(({ label, name }) => ({ label, key: name })),
+              })),
+            },
+            {
+              key: "accounts",
+              label: "Accounts",
+              icon: <CreditCardOutlined />,
+              children: accounts.map(({ label, name }) => ({ label, key: name })),
+            },
+          ]}
+          mode="inline"
+        />
+      </Space>
+    </Drawer>
+  );
+};

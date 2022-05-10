@@ -9,17 +9,15 @@ import { AddExpenseIncomeModal } from "../../AddExpenseIncomeModal";
 import { AddTransferModal } from "../../AddTransferModal";
 
 import styles from "./Header.module.less";
+import { useFetchAccounts } from "../../../hooks";
 
 const { Header: HeaderAntd } = Layout;
-
-const accounts = [
-  { label: "Visa", key: "visa" },
-  { label: "Cash", key: "cash" },
-];
 
 export const Header = ({ onClick }: { onClick: () => void }) => {
   const [expenseIncomeModalOpen, setExpenseIncomeModalOpen] = useState(false);
   const [transferModalOpen, setTransferModalOpen] = useState(false);
+
+  const { data = [] } = useFetchAccounts();
 
   const [searchParams] = useSearchParams();
   const account = searchParams.get(ACCOUNT_KEY) ?? undefined;
@@ -32,19 +30,23 @@ export const Header = ({ onClick }: { onClick: () => void }) => {
             <Button key="3" type="primary" onClick={() => setExpenseIncomeModalOpen(true)}>
               Add expense/income
             </Button>,
-            <Button disabled={accounts.length === 0} key="2" onClick={() => setTransferModalOpen(true)}>
+            <Button disabled={data.length === 0} key="2" onClick={() => setTransferModalOpen(true)}>
               Add transfer
             </Button>,
             <Button key="1" shape="circle" icon={<MoreOutlined />} onClick={onClick} />,
           ]}
-          subTitle={account?.toLocaleUpperCase()}
+          subTitle={account?.toUpperCase()}
           title="Dashboard"
           style={{ width: "100%", padding: "12px 0" }}
         />
       </HeaderAntd>
 
-      <AddExpenseIncomeModal visible={expenseIncomeModalOpen} onClose={() => setExpenseIncomeModalOpen(false)} />
-      <AddTransferModal accounts={accounts} visible={transferModalOpen} onClose={() => setTransferModalOpen(false)} />
+      {expenseIncomeModalOpen && (
+        <AddExpenseIncomeModal visible={expenseIncomeModalOpen} onClose={() => setExpenseIncomeModalOpen(false)} />
+      )}
+      {transferModalOpen && (
+        <AddTransferModal accounts={data} visible={transferModalOpen} onClose={() => setTransferModalOpen(false)} />
+      )}
     </>
   );
 };

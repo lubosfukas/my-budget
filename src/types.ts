@@ -1,9 +1,14 @@
 export type Account = {
-  key: string;
+  id: number;
   label: string;
+  name: string;
 };
 
+export type CategoryType = "EXPENSES" | "INCOMES";
+
 export type Category = {
-  key: string;
+  id: number;
   label: string;
+  name: string;
+  type: CategoryType;
 };

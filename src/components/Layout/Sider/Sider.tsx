@@ -3,16 +3,12 @@ import moment from "moment";
 import { useSearchParams } from "react-router-dom";
 
 import { ACCOUNT_KEY, PERIOD_KEY, TIME_KEY } from "../../../utils/constants";
+import { useFetchAccounts } from "../../../hooks";
 
 import styles from "./Sider.module.less";
 
 const { Sider: SiderAntd } = Layout;
 const { Option } = Select;
-
-const accounts = [
-  { label: "Visa", key: "visa" },
-  { label: "Cash", key: "cash" },
-];
 
 const timePeriods = [
   { label: "Day", key: "day" },
@@ -23,16 +19,10 @@ const timePeriods = [
 
 const dayPeriod = timePeriods.find(({ key }) => key.toLowerCase() === "day")?.key ?? "";
 
-const getInitUrlSearchParams = () => {
-  const searchParams = new URLSearchParams();
-  searchParams.append(ACCOUNT_KEY, accounts[0].key);
-  searchParams.append(PERIOD_KEY, timePeriods[0].key);
-
-  return searchParams;
-};
-
 export const Sider = () => {
-  const [searchParams, setSearchParams] = useSearchParams(getInitUrlSearchParams());
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const { data = [] } = useFetchAccounts();
 
   const [account, setAccount] = [
     searchParams.get(ACCOUNT_KEY) ?? undefined,
@@ -68,8 +58,8 @@ export const Sider = () => {
     <SiderAntd className={styles.sider} style={{ backgroundColor: "white" }}>
       <Space direction="vertical" size="middle" style={{ width: "100%", padding: "24px" }}>
         <Select onChange={(newValue: string) => setAccount(newValue)} style={{ width: "100%" }} value={account}>
-          {accounts.map(({ label, key }) => (
-            <Option key={key} value={key}>
+          {data.map(({ id, label, name }) => (
+            <Option key={id} value={name}>
               {label}
             </Option>
           ))}
