@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 
-import { API_URL } from "../../utils/constants";
 import { Category } from "../../types";
+import { API_URL } from "../../utils/constants";
 
 export const fetchCategoriesUrl = `${API_URL}/categories`;
 export const QUERY_KEY = "fetchCategories";

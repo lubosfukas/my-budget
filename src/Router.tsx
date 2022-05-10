@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import { Dashboard } from "./pages";
 import { Layout } from "./components";
+import { Dashboard } from "./pages";
 
 export const Router = () => (
   <BrowserRouter>

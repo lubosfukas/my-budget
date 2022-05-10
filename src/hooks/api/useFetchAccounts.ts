@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 
-import { API_URL } from "../../utils/constants";
 import { Account } from "../../types";
+import { API_URL } from "../../utils/constants";
 
 export const fetchAccountsUrl = `${API_URL}/accounts`;
 export const QUERY_KEY = "fetchAccounts";

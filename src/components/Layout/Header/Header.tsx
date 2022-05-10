@@ -1,15 +1,13 @@
-import { Button, Layout, PageHeader } from "antd";
-import { MoreOutlined } from "@ant-design/icons";
 import { useState } from "react";
-
+import { MoreOutlined } from "@ant-design/icons";
+import { Button, Layout, PageHeader } from "antd";
 import { useSearchParams } from "react-router-dom";
 
+import { useFetchAccounts } from "../../../hooks";
 import { ACCOUNT_KEY } from "../../../utils/constants";
 import { AddExpenseIncomeModal } from "../../AddExpenseIncomeModal";
 import { AddTransferModal } from "../../AddTransferModal";
-
 import styles from "./Header.module.less";
-import { useFetchAccounts } from "../../../hooks";
 
 const { Header: HeaderAntd } = Layout;
 

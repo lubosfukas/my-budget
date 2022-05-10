@@ -1,9 +1,9 @@
-import { Table } from "antd";
 import { useEffect } from "react";
+import { Table } from "antd";
 import { useSearchParams } from "react-router-dom";
 
-import { ACCOUNT_KEY } from "../utils/constants";
 import { Box } from "../components";
+import { ACCOUNT_KEY } from "../utils/constants";
 
 const columns = [
   {

@@ -1,9 +1,9 @@
-import { Modal, Tabs } from "antd";
 import { useState } from "react";
+import { Modal, Tabs } from "antd";
 
-import { CategoryName, Content } from "./Content";
-import { CategoryType } from "../../types";
 import { useFetchCategories } from "../../hooks";
+import { CategoryType } from "../../types";
+import { CategoryName, Content } from "./Content";
 
 const { TabPane } = Tabs;
 

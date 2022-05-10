@@ -1,8 +1,8 @@
 import { CreditCardOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { Drawer, Menu, Space } from "antd";
 
-import { groupBy, toCamelCase } from "./utils";
 import { useFetchAccountsAndCategories } from "../../hooks";
+import { groupBy, toCamelCase } from "./utils";
 
 type Props = { open: boolean; onClose: () => void };
 
