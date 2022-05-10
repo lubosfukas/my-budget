@@ -8,7 +8,7 @@ module.exports = {
   parserOptions: {
     project: ["./tsconfig.eslint.json"],
   },
-  plugins: ["react", "@typescript-eslint"],
+  plugins: ["react", "simple-import-sort", "@typescript-eslint"],
   rules: {
     "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
     "import/prefer-default-export": "off",
@@ -19,14 +19,16 @@ module.exports = {
     "react/jsx-filename-extension": [2, { extensions: [".js", ".jsx", ".ts", ".tsx"] }],
     "react/react-in-jsx-scope": "off",
     "react/require-default-props": [0],
-    "sort-imports": [
+    "simple-import-sort/imports": [
       "error",
       {
-        ignoreCase: false,
-        ignoreDeclarationSort: false,
-        ignoreMemberSort: false,
-        memberSyntaxSortOrder: ["none", "all", "multiple", "single"],
-        allowSeparatedGroups: true,
+        groups: [
+          // each outer array is separated by a blank line
+          ["^\\u0000"], // side effect imports
+          ["^react(-dom)?$", "^@?\\w"], // react, then external packages
+          ["^[^.]", "^\\.", "^[^(\\w|@ )].*/[A-Z][^/]*$"], // absolute imports, relative imports, relative imports of Components (where the last part of the path is capitalized)
+          ["^@?\\w.*\\.(c|sa|le)ss$", "^\\..*\\.(c|sa|le)ss$"], // styles (external, then relative)
+        ],
       },
     ],
   },
