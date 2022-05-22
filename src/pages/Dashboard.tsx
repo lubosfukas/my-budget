@@ -3,6 +3,7 @@ import { Table } from "antd";
 import { useSearchParams } from "react-router-dom";
 
 import { Box } from "../components";
+import { useFetchTransactions } from "../hooks";
 import { ACCOUNT_KEY } from "../utils/constants";
 
 const columns = [
@@ -34,16 +35,6 @@ const columns = [
   },
 ];
 
-const data = [
-  {
-    key: 1,
-    category: "Entertainment",
-    note: "Spotify",
-    balance: 11.99,
-    date: "2022-04-17T09:24:30Z",
-  },
-];
-
 export const Dashboard = () => {
   const [searchParams] = useSearchParams();
   const account = searchParams.get(ACCOUNT_KEY) ?? undefined;
@@ -52,9 +43,14 @@ export const Dashboard = () => {
     document.title = account ? `${account.toLocaleUpperCase()} - Dashboard` : "Dashboard";
   });
 
+  const { data = [] } = useFetchTransactions();
+
   return (
     <Box>
-      <Table columns={columns} dataSource={data} />
+      <Table
+        columns={columns}
+        dataSource={data.map(({ category, id, ...rest }) => ({ ...rest, key: id, category: category.label }))}
+      />
     </Box>
   );
 };
