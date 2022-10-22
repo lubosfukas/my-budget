@@ -18,6 +18,7 @@ module.exports = {
     ],
     "react/jsx-filename-extension": [2, { extensions: [".js", ".jsx", ".ts", ".tsx"] }],
     "react/react-in-jsx-scope": "off",
+    "react/jsx-props-no-spreading": "off",
     "react/require-default-props": [0],
     "no-return-await": "off",
     "@typescript-eslint/return-await": "off",
