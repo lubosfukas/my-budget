@@ -1,4 +1,4 @@
-import { useModifyCategory } from "../../../hooks/api/useModifyCategory";
+import { useModifyCategory } from "../../../hooks";
 import { Category } from "../../../types";
 import { CategoryModal } from "./CategoryModal";
 

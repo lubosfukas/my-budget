@@ -13,15 +13,15 @@ type Props = { open: boolean; onClose: () => void };
 export const SideDrawer = ({ open, onClose }: Props) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | undefined>();
-  const { data: accounts = [], isLoading: isLoadingAccounts } = useFetchAccounts();
-  const { data: categories = [], isLoading: isLoadingCategories } = useFetchCategories();
+  const { data: accounts, isLoading: isLoadingAccounts } = useFetchAccounts();
+  const { data: categories, isLoading: isLoadingCategories } = useFetchCategories();
 
   const isLoading = isLoadingAccounts || isLoadingCategories;
-  const groupedCategories = groupBy(categories, ({ type }) => type);
+  const groupedCategories = categories && categories.length > 0 ? groupBy(categories, ({ type }) => type) : {};
 
   return (
     <>
-      <Drawer onClose={onClose} placement="right" visible={open}>
+      <Drawer destroyOnClose visible={open} placement="right" onClose={onClose}>
         {isLoading && (
           <div className={styles.wrapper}>
             <Spin />
@@ -49,13 +49,16 @@ export const SideDrawer = ({ open, onClose }: Props) => {
                   key: "accounts",
                   label: "Accounts",
                   icon: <CreditCardOutlined />,
-                  children: accounts.map(({ label, id }) => ({ label, key: `${id}-${toCamelCase(label)}` })),
+                  children: accounts?.map(({ label, id }) => ({ label, key: `${id}-${toCamelCase(label)}` })),
                 },
               ]}
               mode="inline"
               onClick={({ key }) => {
-                const id = key.split("-")[0];
-                const category = categories.find(({ id: categoryId }) => categoryId === parseInt(id, 10));
+                const [id, label] = key.split("-");
+                const category = categories?.find(
+                  ({ id: categoryId, label: categoryLabel }) =>
+                    id === categoryId.toString() && label === toCamelCase(categoryLabel)
+                );
                 setSelectedCategory(category);
                 setModalOpen(true);
               }}
