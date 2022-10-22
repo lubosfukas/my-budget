@@ -5,15 +5,15 @@ import { Controller, useForm } from "react-hook-form";
 import { useRemoveCategory } from "../../../hooks";
 import { Category } from "../../../types";
 
+type FormValues = Pick<Category, "label">;
+
 type Props = {
   visible: boolean;
   onClose: () => void;
-  onSubmit: (category: Pick<Category, "label">) => void;
+  onSubmit: (values: FormValues) => void;
   category?: Category;
   isSubmitting?: boolean;
 };
-
-type FormValues = Pick<Category, "label">;
 
 export const CategoryModal = ({ category, isSubmitting, onClose, onSubmit, visible }: Props) => {
   const {
@@ -64,7 +64,7 @@ export const CategoryModal = ({ category, isSubmitting, onClose, onSubmit, visib
       destroyOnClose
       visible={visible}
       footer={buttons}
-      title="Edit category"
+      title={category ? "Edit category" : "Add category"}
       width={300}
       onCancel={onClose}
     >
