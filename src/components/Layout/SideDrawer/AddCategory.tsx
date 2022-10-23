@@ -15,6 +15,7 @@ export const AddCategory = ({ onClose, visible, type }: Props) => {
     <CategoryModal
       isSubmitting={isLoading}
       visible={visible}
+      title={type === "EXPENSES" ? "Add expense category" : "Add income category"}
       onClose={onClose}
       onSubmit={async (category) => {
         await mutateAsync({ ...category, type });

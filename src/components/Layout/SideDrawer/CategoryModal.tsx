@@ -8,14 +8,15 @@ import { Category } from "../../../types";
 type FormValues = Pick<Category, "label">;
 
 type Props = {
-  visible: boolean;
   onClose: () => void;
   onSubmit: (values: FormValues) => void;
+  title: string;
+  visible: boolean;
   category?: Category;
   isSubmitting?: boolean;
 };
 
-export const CategoryModal = ({ category, isSubmitting, onClose, onSubmit, visible }: Props) => {
+export const CategoryModal = ({ category, isSubmitting, onClose, onSubmit, title, visible }: Props) => {
   const {
     control,
     handleSubmit,
@@ -59,15 +60,7 @@ export const CategoryModal = ({ category, isSubmitting, onClose, onSubmit, visib
     );
 
   return (
-    <Modal
-      centered
-      destroyOnClose
-      visible={visible}
-      footer={buttons}
-      title={category ? "Edit category" : "Add category"}
-      width={300}
-      onCancel={onClose}
-    >
+    <Modal centered destroyOnClose visible={visible} footer={buttons} title={title} width={300} onCancel={onClose}>
       <Controller
         control={control}
         name="label"
