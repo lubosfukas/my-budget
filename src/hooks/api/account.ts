@@ -1,14 +1,18 @@
-import axios from "axios";
-import { useMutation, useQuery } from "react-query";
+import axios, { AxiosResponse } from "axios";
+import { QueryKey, useMutation, useQuery, UseQueryOptions } from "react-query";
 
 import { Account } from "../../types";
 import { API_URL } from "../../utils/constants";
 
-export const useFetchAccounts = () =>
-  useQuery(["account", "all"], async () => {
-    const { data } = await axios.get<Array<Account>>(`${API_URL}/accounts`);
-    return data;
-  });
+export const useFetchAccounts = (config?: UseQueryOptions<Array<Account>, AxiosResponse, Array<Account>>) =>
+  useQuery(
+    ["account", "all"] as QueryKey,
+    async () => {
+      const { data } = await axios.get<Array<Account>>(`${API_URL}/accounts`);
+      return data;
+    },
+    config
+  );
 
 export const useFetchAccount = (id: Account["id"]) =>
   useQuery(["account", id], async () => {

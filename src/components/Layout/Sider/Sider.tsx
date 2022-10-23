@@ -1,4 +1,4 @@
-import { DatePicker, DatePickerProps, Layout, Menu, Select, Space } from "antd";
+import { DatePicker, DatePickerProps, Layout, Menu, Select, Space, Spin } from "antd";
 import moment from "moment";
 import { useSearchParams } from "react-router-dom";
 
@@ -11,23 +11,31 @@ const { Option } = Select;
 
 type Period = DatePickerProps["picker"];
 
-const timePeriods: Array<{ label: string; name: Period }> = [
-  { label: "Day", name: "date" },
-  { label: "Week", name: "week" },
-  { label: "Month", name: "month" },
-  { label: "Year", name: "year" },
+const timePeriods: Array<{ label: string; id: Period }> = [
+  { label: "Day", id: "date" },
+  { label: "Week", id: "week" },
+  { label: "Month", id: "month" },
+  { label: "Year", id: "year" },
 ];
 
 export const Sider = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { data = [] } = useFetchAccounts();
-
-  const [account, setAccount] = [
-    searchParams.get(ACCOUNT_KEY) ?? undefined,
-    (newAccount: string) => {
+  const { data: accounts, isLoading } = useFetchAccounts({
+    onSuccess: (data) => {
       const newParams = new URLSearchParams(searchParams);
-      newParams.set(ACCOUNT_KEY, newAccount);
+      newParams.set(ACCOUNT_KEY, data[0].id.toString());
+      const period = timePeriods[0].id;
+      if (period) newParams.set(PERIOD_KEY, period);
+      setSearchParams(newParams);
+    },
+  });
+
+  const [accountId, setAccountId] = [
+    searchParams.get(ACCOUNT_KEY) ?? undefined,
+    (newAccountId: number) => {
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set(ACCOUNT_KEY, newAccountId.toString());
       setSearchParams(newParams);
     },
   ];
@@ -54,26 +62,37 @@ export const Sider = () => {
 
   return (
     <SiderAntd className={styles.sider} style={{ backgroundColor: "white" }}>
-      <Space direction="vertical" size="middle" style={{ width: "100%", padding: "24px" }}>
-        <Select value={account} onChange={(newValue: string) => setAccount(newValue)} style={{ width: "100%" }}>
-          {data.map(({ id, label, name }) => (
-            <Option key={id} value={name}>
-              {label}
-            </Option>
-          ))}
-        </Select>
-        <Menu
-          items={timePeriods.map(({ label, name }) => ({ label, key: name as string }))}
-          selectedKeys={period ? [period] : undefined}
-          onSelect={({ key }) => setPeriod(key)}
-        />
-        <DatePicker
-          picker={period as Period}
-          value={time ? moment(time) : undefined}
-          onChange={(_, dateString) => setTime(dateString)}
-          style={{ width: "100%" }}
-        />
-      </Space>
+      {isLoading && (
+        <div className={styles.wrapper}>
+          <Spin />
+        </div>
+      )}
+      {!isLoading && accounts && accounts.length > 0 && (
+        <Space direction="vertical" size="middle" style={{ width: "100%", padding: "24px" }}>
+          <Select
+            value={accounts.find(({ id }) => id.toString() === accountId)?.id}
+            onChange={(newValue) => setAccountId(newValue)}
+            style={{ width: "100%" }}
+          >
+            {accounts.map(({ id, label }) => (
+              <Option key={id} value={id}>
+                {label}
+              </Option>
+            ))}
+          </Select>
+          <Menu
+            items={timePeriods.map(({ label, id }) => ({ label, key: id as string }))}
+            selectedKeys={period ? [period] : undefined}
+            onSelect={({ key }) => setPeriod(key)}
+          />
+          <DatePicker
+            picker={period as Period}
+            value={time ? moment(time) : undefined}
+            onChange={(_, dateString) => setTime(dateString)}
+            style={{ width: "100%" }}
+          />
+        </Space>
+      )}
     </SiderAntd>
   );
 };
