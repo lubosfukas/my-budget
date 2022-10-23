@@ -1,8 +1,8 @@
 import { Account, Category, Transaction } from "../types";
 
 export const accounts: Array<Account> = [
-  { id: 1, label: "Visa", name: "visa" },
-  { id: 2, label: "Cash", name: "cash" },
+  { id: 1, label: "Visa" },
+  { id: 2, label: "Cash" },
 ];
 
 const visaAccount = accounts[0];
