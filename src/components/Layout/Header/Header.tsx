@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MoreOutlined } from "@ant-design/icons";
 import { Button, Layout, PageHeader } from "antd";
 import { useSearchParams } from "react-router-dom";
@@ -22,6 +22,10 @@ export const Header = ({ onClick }: { onClick: () => void }) => {
   const { data: categories } = useFetchCategories();
 
   const account = accounts?.find(({ id }) => id.toString() === accountId);
+
+  useEffect(() => {
+    document.title = account ? `${account.label.toLocaleUpperCase()} - Dashboard` : "Dashboard";
+  });
 
   return (
     <>
