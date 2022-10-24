@@ -1,14 +1,19 @@
 import { rest } from "msw";
 
-import { Category } from "../types";
+import { Category, TransactionCreatePayload } from "../types";
 import { API_URL } from "../utils/constants";
 import { accounts, categories, transactions } from "../utils/mockedData";
 
-const getRandomId = (min = 0, max = 1000) => Math.random() * (max - min) + min;
+const getRandomId = (min = 0, max = 1000) => Math.floor(Math.random() * (max - min) + min);
 
 export const handlers = [
   rest.get(`${API_URL}/accounts`, (_, res, ctx) => res(ctx.delay(500), ctx.status(200), ctx.json(accounts))),
   rest.get(`${API_URL}/transactions`, (_, res, ctx) => res(ctx.status(200), ctx.json(transactions))),
+  rest.post(`${API_URL}/transactions`, (req, res, ctx) => {
+    const transaction = req.body as TransactionCreatePayload;
+
+    return res(ctx.status(200), ctx.json({ ...transaction, id: getRandomId() }));
+  }),
   rest.get(`${API_URL}/categories`, (_, res, ctx) => res(ctx.delay(1000), ctx.status(200), ctx.json(categories))),
   rest.get(`${API_URL}/categories/:id`, (req, res, ctx) => {
     const { id } = req.params;

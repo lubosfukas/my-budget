@@ -5,21 +5,22 @@ import { useSearchParams } from "react-router-dom";
 
 import { useFetchAccounts, useFetchCategories } from "../../../hooks";
 import { ACCOUNT_KEY } from "../../../utils/constants";
-import { AddExpenseIncomeModal } from "../../AddExpenseIncomeModal";
 import { AddTransferModal } from "../../AddTransferModal";
+import { AddTransactionModal } from "./AddTransactionModal";
 import styles from "./Header.module.less";
 
 const { Header: HeaderAntd } = Layout;
 
 export const Header = ({ onClick }: { onClick: () => void }) => {
-  const [expenseIncomeModalOpen, setExpenseIncomeModalOpen] = useState(false);
+  const [transactionModalOpen, setTransactionModalOpen] = useState(false);
   const [transferModalOpen, setTransferModalOpen] = useState(false);
+
+  const [searchParams] = useSearchParams();
+  const accountId = searchParams.get(ACCOUNT_KEY) ?? undefined;
 
   const { data: accounts } = useFetchAccounts();
   const { data: categories } = useFetchCategories();
 
-  const [searchParams] = useSearchParams();
-  const accountId = searchParams.get(ACCOUNT_KEY) ?? undefined;
   const account = accounts?.find(({ id }) => id.toString() === accountId);
 
   return (
@@ -31,7 +32,7 @@ export const Header = ({ onClick }: { onClick: () => void }) => {
               disabled={!categories || categories.length === 0}
               key="3"
               type="primary"
-              onClick={() => setExpenseIncomeModalOpen(true)}
+              onClick={() => setTransactionModalOpen(true)}
             >
               Add expense/income
             </Button>,
@@ -46,11 +47,15 @@ export const Header = ({ onClick }: { onClick: () => void }) => {
         />
       </HeaderAntd>
 
-      {expenseIncomeModalOpen && (
-        <AddExpenseIncomeModal visible={expenseIncomeModalOpen} onClose={() => setExpenseIncomeModalOpen(false)} />
+      {transactionModalOpen && categories && (
+        <AddTransactionModal
+          visible={transactionModalOpen}
+          categories={categories}
+          onClose={() => setTransactionModalOpen(false)}
+        />
       )}
       {transferModalOpen && accounts && (
-        <AddTransferModal accounts={accounts} visible={transferModalOpen} onClose={() => setTransferModalOpen(false)} />
+        <AddTransferModal visible={transferModalOpen} accounts={accounts} onClose={() => setTransferModalOpen(false)} />
       )}
     </>
   );

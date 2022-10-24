@@ -3,19 +3,19 @@ export type Account = {
   label: string;
 };
 
-export type CategoryType = "EXPENSES" | "INCOMES";
-
 export type Category = {
   id: number;
   label: string;
-  type: CategoryType;
+  type: "EXPENSES" | "INCOMES";
 };
 
 export type Transaction = {
   id: number;
   balance: number;
   date: string;
-  account: Account;
-  category: Category;
+  account: Account["id"];
+  category: Category["id"];
   note?: string;
 };
+
+export type TransactionCreatePayload = Pick<Transaction, "account" | "balance" | "category" | "date" | "note">;
