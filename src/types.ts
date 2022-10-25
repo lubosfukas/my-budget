@@ -26,3 +26,4 @@ export type Transaction = {
 };
 
 export type TransactionCreatePayload = Omit<Transaction, "id">;
+export type TransactionModifyPayload = TransactionCreatePayload;

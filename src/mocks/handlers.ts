@@ -6,6 +6,7 @@ import {
   CategoryCreatePayload,
   CategoryModifyPayload,
   TransactionCreatePayload,
+  TransactionModifyPayload,
 } from "../types";
 import { API_URL } from "../utils/constants";
 import { accounts, categories, transactions } from "../utils/mockedData";
@@ -25,9 +26,9 @@ const accountHandlers = [
   }),
   rest.patch(`${API_URL}/accounts/:id`, (req, res, ctx) => {
     const { id } = req.params;
-    const { label } = req.body as AccountModifyPayload;
+    const body = req.body as AccountModifyPayload;
     const account = accounts.find(({ id: accountId }) => id === accountId.toString());
-    return res(ctx.delay(500), ctx.status(200), ctx.json({ ...account, label }));
+    return res(ctx.delay(500), ctx.status(200), ctx.json({ ...account, ...body }));
   }),
   rest.delete(`${API_URL}/accounts/:id`, (_, res, ctx) => res(ctx.delay(500), ctx.status(200))),
 ];
@@ -45,20 +46,31 @@ const categoryHandlers = [
   }),
   rest.patch(`${API_URL}/categories/:id`, (req, res, ctx) => {
     const { id } = req.params;
-    const { label } = req.body as CategoryModifyPayload;
+    const body = req.body as CategoryModifyPayload;
     const category = categories.find(({ id: categoryId }) => id === categoryId.toString());
-    return res(ctx.delay(500), ctx.status(200), ctx.json({ ...category, label }));
+    return res(ctx.delay(500), ctx.status(200), ctx.json({ ...category, ...body }));
   }),
   rest.delete(`${API_URL}/categories/:id`, (_, res, ctx) => res(ctx.delay(500), ctx.status(200))),
 ];
 
-export const handlers = [
-  ...accountHandlers,
-  ...categoryHandlers,
-
-  rest.get(`${API_URL}/transactions`, (_, res, ctx) => res(ctx.status(200), ctx.json(transactions))),
+const transactionHandlers = [
+  rest.get(`${API_URL}/transactions`, (_, res, ctx) => res(ctx.delay(500), ctx.status(200), ctx.json(transactions))),
+  rest.get(`${API_URL}/transactions/:id`, (req, res, ctx) => {
+    const { id } = req.params;
+    const transaction = transactions.find(({ id: transactionId }) => id === transactionId.toString());
+    return res(ctx.delay(500), ctx.status(200), ctx.json(transaction));
+  }),
   rest.post(`${API_URL}/transactions`, (req, res, ctx) => {
     const transaction = req.body as TransactionCreatePayload;
-    return res(ctx.status(200), ctx.json({ ...transaction, id: getRandomId() }));
+    return res(ctx.status(201), ctx.json({ ...transaction, id: getRandomId() }));
   }),
+  rest.patch(`${API_URL}/transactions/:id`, (req, res, ctx) => {
+    const { id } = req.params;
+    const body = req.body as TransactionModifyPayload;
+    const transaction = transactions.find(({ id: transactionId }) => id === transactionId.toString());
+    return res(ctx.delay(500), ctx.status(200), ctx.json({ ...transaction, ...body }));
+  }),
+  rest.delete(`${API_URL}/transactions/:id`, (_, res, ctx) => res(ctx.delay(500), ctx.status(200))),
 ];
+
+export const handlers = [...accountHandlers, ...categoryHandlers, ...transactionHandlers];
