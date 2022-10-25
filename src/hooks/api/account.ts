@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { QueryKey, useMutation, useQuery, UseQueryOptions } from "react-query";
 
-import { Account } from "../../types";
+import { Account, AccountCreatePayload } from "../../types";
 import { API_URL } from "../../utils/constants";
 
 export const useFetchAccounts = (config?: UseQueryOptions<Array<Account>, AxiosResponse, Array<Account>>) =>
@@ -21,9 +21,9 @@ export const useFetchAccount = (id: Account["id"]) =>
   });
 
 export const useCreateAccount = () =>
-  useMutation((account: Pick<Account, "label">) => axios.post(`${API_URL}/accounts`, account));
+  useMutation((account: AccountCreatePayload) => axios.post(`${API_URL}/accounts`, account));
 
 export const useModifyAccount = () =>
-  useMutation((account: Pick<Account, "id" | "label">) => axios.patch(`${API_URL}/accounts/${account.id}`, account));
+  useMutation((account: Account) => axios.patch(`${API_URL}/accounts/${account.id}`, account));
 
 export const useRemoveAccount = () => useMutation((id: Account["id"]) => axios.delete(`${API_URL}/accounts/${id}`));

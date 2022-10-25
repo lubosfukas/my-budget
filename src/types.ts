@@ -1,7 +1,10 @@
 export type Account = {
   id: number;
+  initialBalance: number;
   label: string;
 };
+
+export type AccountCreatePayload = Pick<Account, "initialBalance" | "label">;
 
 export type Category = {
   id: number;

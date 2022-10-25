@@ -1,6 +1,6 @@
 import { rest } from "msw";
 
-import { Account, Category, TransactionCreatePayload } from "../types";
+import { Account, AccountCreatePayload, Category, TransactionCreatePayload } from "../types";
 import { API_URL } from "../utils/constants";
 import { accounts, categories, transactions } from "../utils/mockedData";
 
@@ -14,8 +14,8 @@ const accountHandlers = [
     return res(ctx.delay(500), ctx.status(200), ctx.json(account));
   }),
   rest.post(`${API_URL}/accounts`, (req, res, ctx) => {
-    const account = req.body as Account;
-    return res(ctx.delay(500), ctx.status(201), ctx.json(account));
+    const account = req.body as AccountCreatePayload;
+    return res(ctx.delay(500), ctx.status(201), ctx.json({ ...account, id: getRandomId() }));
   }),
   rest.patch(`${API_URL}/accounts/:id`, (req, res, ctx) => {
     const { id } = req.params;
