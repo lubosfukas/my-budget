@@ -17,8 +17,8 @@ export const AddCategory = ({ onClose, visible, type }: Props) => {
       visible={visible}
       title={type === "EXPENSES" ? "Add expense category" : "Add income category"}
       onClose={onClose}
-      onSubmit={async (category) => {
-        await mutateAsync({ ...category, type });
+      onSubmit={async (data) => {
+        await mutateAsync({ ...data, type });
         onClose();
       }}
     />

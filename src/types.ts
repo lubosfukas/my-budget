@@ -4,7 +4,8 @@ export type Account = {
   label: string;
 };
 
-export type AccountCreatePayload = Pick<Account, "initialBalance" | "label">;
+export type AccountCreatePayload = Omit<Account, "id">;
+export type AccountModifyPayload = AccountCreatePayload;
 
 export type Category = {
   id: number;
@@ -12,13 +13,16 @@ export type Category = {
   type: "EXPENSES" | "INCOMES";
 };
 
+export type CategoryCreatePayload = Omit<Category, "id">;
+export type CategoryModifyPayload = Pick<Category, "label">;
+
 export type Transaction = {
-  id: number;
-  balance: number;
-  date: string;
   account: Account["id"];
+  balance: number;
   category: Category["id"];
+  date: string;
+  id: number;
   note?: string;
 };
 
-export type TransactionCreatePayload = Pick<Transaction, "account" | "balance" | "category" | "date" | "note">;
+export type TransactionCreatePayload = Omit<Transaction, "id">;

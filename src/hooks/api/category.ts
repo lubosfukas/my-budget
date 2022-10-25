@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useMutation, useQuery } from "react-query";
 
-import { Category } from "../../types";
+import { Category, CategoryCreatePayload, CategoryModifyPayload } from "../../types";
 import { API_URL } from "../../utils/constants";
 
 export const useFetchCategories = () =>
@@ -17,11 +17,11 @@ export const useFetchCategory = (id: Category["id"]) =>
   });
 
 export const useCreateCategory = () =>
-  useMutation((category: Pick<Category, "label" | "type">) => axios.post(`${API_URL}/categories`, category));
+  useMutation((category: CategoryCreatePayload) => axios.post(`${API_URL}/categories`, category));
 
 export const useModifyCategory = () =>
-  useMutation((category: Pick<Category, "label" | "id">) =>
-    axios.patch(`${API_URL}/categories/${category.id}`, category)
+  useMutation(({ category, id }: { category: CategoryModifyPayload; id: Category["id"] }) =>
+    axios.patch(`${API_URL}/categories/${id}`, category)
   );
 
 export const useRemoveCategory = () => useMutation((id: Category["id"]) => axios.delete(`${API_URL}/categories/${id}`));

@@ -19,7 +19,7 @@ export const EditCategory = ({ onClose, visible, category }: Props) => {
       title="Edit category"
       onClose={onClose}
       onSubmit={async (data) => {
-        await mutateAsync({ ...data, id: category.id });
+        await mutateAsync({ category: data, id: category.id });
         onClose();
       }}
     />

@@ -1,6 +1,12 @@
 import { rest } from "msw";
 
-import { Account, AccountCreatePayload, Category, TransactionCreatePayload } from "../types";
+import {
+  AccountCreatePayload,
+  AccountModifyPayload,
+  CategoryCreatePayload,
+  CategoryModifyPayload,
+  TransactionCreatePayload,
+} from "../types";
 import { API_URL } from "../utils/constants";
 import { accounts, categories, transactions } from "../utils/mockedData";
 
@@ -19,7 +25,7 @@ const accountHandlers = [
   }),
   rest.patch(`${API_URL}/accounts/:id`, (req, res, ctx) => {
     const { id } = req.params;
-    const { label } = req.body as Account;
+    const { label } = req.body as AccountModifyPayload;
     const account = accounts.find(({ id: accountId }) => id === accountId.toString());
     return res(ctx.delay(500), ctx.status(200), ctx.json({ ...account, label }));
   }),
@@ -34,12 +40,12 @@ const categoryHandlers = [
     return res(ctx.delay(500), ctx.status(200), ctx.json(category));
   }),
   rest.post(`${API_URL}/categories`, (req, res, ctx) => {
-    const category = req.body as Category;
+    const category = req.body as CategoryCreatePayload;
     return res(ctx.delay(500), ctx.status(201), ctx.json({ ...category, id: getRandomId() }));
   }),
   rest.patch(`${API_URL}/categories/:id`, (req, res, ctx) => {
     const { id } = req.params;
-    const { label } = req.body as Category;
+    const { label } = req.body as CategoryModifyPayload;
     const category = categories.find(({ id: categoryId }) => id === categoryId.toString());
     return res(ctx.delay(500), ctx.status(200), ctx.json({ ...category, label }));
   }),

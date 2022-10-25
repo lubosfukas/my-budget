@@ -18,7 +18,7 @@ export const EditAccount = ({ account, onClose, visible }: Props) => {
       visible={visible}
       onClose={onClose}
       onSubmit={async (data) => {
-        await mutateAsync({ ...data, id: account.id });
+        await mutateAsync({ account: data, id: account.id });
         onClose();
       }}
     />
