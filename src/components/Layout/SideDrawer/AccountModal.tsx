@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { Button, Input, Modal } from "antd";
+import { Button, Input, InputNumber, Modal } from "antd";
 import { Controller, useForm } from "react-hook-form";
 
 import { useRemoveAccount } from "../../../hooks";
 import { Account } from "../../../types";
 
-type FormValues = Pick<Account, "label">;
+type FormValues = Pick<Account, "initialBalance" | "label">;
 
 type Props = {
   visible: boolean;
@@ -21,9 +21,12 @@ export const AccountModal = ({ account, isSubmitting, onClose, onSubmit, visible
     handleSubmit,
     resetField,
     formState: { isDirty, isValid },
-  } = useForm<FormValues>({ defaultValues: { label: account?.label } });
+  } = useForm<FormValues>({ defaultValues: { initialBalance: account?.initialBalance, label: account?.label } });
 
-  useEffect(() => resetField("label", { defaultValue: account?.label }), [account]);
+  useEffect(() => {
+    resetField("initialBalance", { defaultValue: account?.initialBalance });
+    resetField("label", { defaultValue: account?.label });
+  }, [account]);
 
   const { mutateAsync: remove, isLoading: isRemoving } = useRemoveAccount();
 
@@ -73,6 +76,21 @@ export const AccountModal = ({ account, isSubmitting, onClose, onSubmit, visible
         name="label"
         render={({ field: { value, onChange } }) => (
           <Input bordered={false} placeholder="Name" value={value} onChange={onChange} />
+        )}
+        rules={{ required: true }}
+      />
+      <Controller
+        control={control}
+        name="initialBalance"
+        render={({ field: { onBlur, onChange, value } }) => (
+          <InputNumber
+            addonAfter="€"
+            min={0}
+            style={{ width: "100%" }}
+            value={value}
+            onBlur={onBlur}
+            onChange={(newValue) => onChange(newValue)}
+          />
         )}
         rules={{ required: true }}
       />

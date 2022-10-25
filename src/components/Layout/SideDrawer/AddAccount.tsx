@@ -14,8 +14,8 @@ export const AddAccount = ({ onClose, visible }: Props) => {
       isSubmitting={isLoading}
       visible={visible}
       onClose={onClose}
-      onSubmit={async (category) => {
-        await mutateAsync(category);
+      onSubmit={async (data) => {
+        await mutateAsync(data);
         onClose();
       }}
     />
