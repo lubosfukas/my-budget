@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Spin, Table } from "antd";
+import classNames from "classnames";
 
 import { useFetchCategories, useFetchTransactions } from "../../hooks";
 import styles from "./Dashboard.module.less";
@@ -38,27 +39,30 @@ export const Dashboard = () => {
   const { data, isFetching, isLoading: isLoadingTransactions } = useFetchTransactions({ page: currentPage });
   const { data: categories, isLoading: isLoadingCategories } = useFetchCategories();
 
-  if (isLoadingTransactions || isLoadingCategories) return <Spin />;
+  const isLoading = isLoadingTransactions || isLoadingCategories;
 
   return (
-    <div className={styles.wrapper}>
-      <Table
-        loading={isFetching}
-        columns={columns}
-        dataSource={data?.transactions.map(({ category, id, ...rest }) => ({
-          ...rest,
-          key: id,
-          category: categories?.find(({ id: categoryId }) => categoryId === category)?.label ?? "",
-        }))}
-        pagination={{
-          total: data?.total,
-          onChange: (page) => {
-            const newPage = page - 1;
-            if (newPage > currentPage) setCurrentPage((prev) => prev + 1);
-            else setCurrentPage((prev) => Math.max(prev - 1, 0));
-          },
-        }}
-      />
+    <div className={classNames(styles.wrapper, { [styles.loading]: isLoading })}>
+      {isLoading && <Spin />}
+      {!isLoading && (
+        <Table
+          loading={isFetching}
+          columns={columns}
+          dataSource={data?.transactions.map(({ category, id, ...rest }) => ({
+            ...rest,
+            key: id,
+            category: categories?.find(({ id: categoryId }) => categoryId === category)?.label ?? "",
+          }))}
+          pagination={{
+            total: data?.total,
+            onChange: (page) => {
+              const newPage = page - 1;
+              if (newPage > currentPage) setCurrentPage((prev) => prev + 1);
+              else setCurrentPage((prev) => Math.max(prev - 1, 0));
+            },
+          }}
+        />
+      )}
     </div>
   );
 };
