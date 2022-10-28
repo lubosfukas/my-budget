@@ -1,4 +1,5 @@
-import { Table } from "antd";
+import { useState } from "react";
+import { Spin, Table } from "antd";
 
 import { useFetchCategories, useFetchTransactions } from "../../hooks";
 import styles from "./Dashboard.module.less";
@@ -33,21 +34,30 @@ const columns = [
 ];
 
 export const Dashboard = () => {
-  const { data: transactions, isLoading: isLoadingTransactions } = useFetchTransactions();
+  const [currentPage, setCurrentPage] = useState(0);
+  const { data, isFetching, isLoading: isLoadingTransactions } = useFetchTransactions({ page: currentPage });
   const { data: categories, isLoading: isLoadingCategories } = useFetchCategories();
 
-  const isLoading = isLoadingTransactions || isLoadingCategories;
+  if (isLoadingTransactions || isLoadingCategories) return <Spin />;
 
   return (
     <div className={styles.wrapper}>
       <Table
-        loading={isLoading}
+        loading={isFetching}
         columns={columns}
-        dataSource={transactions?.map(({ category, id, ...rest }) => ({
+        dataSource={data?.transactions.map(({ category, id, ...rest }) => ({
           ...rest,
           key: id,
           category: categories?.find(({ id: categoryId }) => categoryId === category)?.label ?? "",
         }))}
+        pagination={{
+          total: data?.total,
+          onChange: (page) => {
+            const newPage = page - 1;
+            if (newPage > currentPage) setCurrentPage((prev) => prev + 1);
+            else setCurrentPage((prev) => Math.max(prev - 1, 0));
+          },
+        }}
       />
     </div>
   );

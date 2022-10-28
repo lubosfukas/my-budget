@@ -54,7 +54,25 @@ const categoryHandlers = [
 ];
 
 const transactionHandlers = [
-  rest.get(`${API_URL}/transactions`, (_, res, ctx) => res(ctx.delay(500), ctx.status(200), ctx.json(transactions))),
+  rest.get(`${API_URL}/transactions?limit=:limit&page=:page`, (req, res, ctx) => {
+    const limitParam = req.url.searchParams.get("limit");
+    const pageParam = req.url.searchParams.get("page");
+
+    const limit = limitParam ? parseInt(limitParam, 10) : 10;
+    const page = pageParam ? parseInt(pageParam, 10) : 0;
+    const offset = page * limit;
+    const selectedTransactions = transactions.slice(offset, offset + limit);
+
+    return res(
+      ctx.delay(500),
+      ctx.status(200),
+      ctx.json({
+        selectionSettings: { limit, page },
+        total: transactions.length,
+        transactions: selectedTransactions,
+      })
+    );
+  }),
   rest.get(`${API_URL}/transactions/:id`, (req, res, ctx) => {
     const { id } = req.params;
     const transaction = transactions.find(({ id: transactionId }) => id === transactionId.toString());

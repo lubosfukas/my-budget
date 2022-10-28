@@ -25,5 +25,14 @@ export type Transaction = {
   note?: string;
 };
 
+export type TransactionListResponse = {
+  transactions: Array<Transaction>;
+  selectionSettings: {
+    limit: number;
+    page: number | null;
+  };
+  total: number;
+};
+
 export type TransactionCreatePayload = Omit<Transaction, "id">;
 export type TransactionModifyPayload = TransactionCreatePayload;

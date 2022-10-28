@@ -10,6 +10,7 @@ module.exports = {
   },
   plugins: ["react", "simple-import-sort", "@typescript-eslint"],
   rules: {
+    "consistent-return": "off",
     "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
     "import/prefer-default-export": "off",
     "react/function-component-definition": [
