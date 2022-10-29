@@ -38,7 +38,7 @@ export const Header = ({ onClick }: { onClick: () => void }) => {
               type="primary"
               onClick={() => setTransactionModalOpen(true)}
             >
-              Add expense/income
+              Add transaction
             </Button>,
             <Button disabled={!accounts || accounts.length === 0} key="2" onClick={() => setTransferModalOpen(true)}>
               Add transfer
