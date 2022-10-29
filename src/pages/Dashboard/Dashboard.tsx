@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Spin, Table } from "antd";
 import classNames from "classnames";
+import { useSearchParams } from "react-router-dom";
 
 import { useFetchCategories, useFetchTransactions } from "../../hooks";
+import { ACCOUNT_KEY } from "../../utils/constants";
 import styles from "./Dashboard.module.less";
 
 const columns = [
@@ -36,7 +38,19 @@ const columns = [
 
 export const Dashboard = () => {
   const [currentPage, setCurrentPage] = useState(0);
-  const { data, isFetching, isLoading: isLoadingTransactions } = useFetchTransactions({ page: currentPage });
+
+  const [searchParams] = useSearchParams();
+  const accountId = searchParams.get(ACCOUNT_KEY);
+
+  const {
+    data,
+    isFetching,
+    isLoading: isLoadingTransactions,
+  } = useFetchTransactions({
+    limit: 10,
+    page: currentPage,
+    accountId: accountId ? parseInt(accountId, 10) : undefined,
+  });
   const { data: categories, isLoading: isLoadingCategories } = useFetchCategories();
 
   const isLoading = isLoadingTransactions || isLoadingCategories;

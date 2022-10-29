@@ -25,11 +25,18 @@ export type Transaction = {
   note?: string;
 };
 
+export type TransactionRequestConfig = {
+  page: number;
+  accountId?: Account["id"];
+  limit?: number;
+};
+
 export type TransactionListResponse = {
   transactions: Array<Transaction>;
   selectionSettings: {
     limit: number;
     page: number | null;
+    accountId?: Account["id"] | null;
   };
   total: number;
 };
