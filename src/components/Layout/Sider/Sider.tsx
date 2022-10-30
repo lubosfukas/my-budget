@@ -88,7 +88,9 @@ export const Sider = () => {
           <DatePicker
             picker={period as Period}
             value={time ? moment(time) : undefined}
-            onChange={(_, dateString) => setTime(dateString)}
+            onChange={(date) => {
+              if (date) setTime(date.toISOString());
+            }}
             style={{ width: "100%" }}
           />
         </Space>
