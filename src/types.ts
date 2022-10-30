@@ -11,6 +11,7 @@ export type Category = {
   id: number;
   label: string;
   type: "EXPENSES" | "INCOMES";
+  account?: Account["id"];
 };
 
 export type CategoryCreatePayload = Omit<Category, "id">;

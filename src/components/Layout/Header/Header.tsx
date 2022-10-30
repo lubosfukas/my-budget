@@ -5,8 +5,8 @@ import { useSearchParams } from "react-router-dom";
 
 import { useFetchAccounts, useFetchCategories } from "../../../hooks";
 import { ACCOUNT_KEY } from "../../../utils/constants";
-import { AddTransferModal } from "../../AddTransferModal";
 import { AddTransactionModal } from "./AddTransactionModal";
+import { AddTransferModal } from "./AddTransferModal";
 import styles from "./Header.module.less";
 
 const { Header: HeaderAntd } = Layout;
@@ -54,12 +54,17 @@ export const Header = ({ onClick }: { onClick: () => void }) => {
       {transactionModalOpen && categories && (
         <AddTransactionModal
           visible={transactionModalOpen}
-          categories={categories}
+          categories={categories.filter(({ account: categoryAccount }) => categoryAccount === undefined)}
           onClose={() => setTransactionModalOpen(false)}
         />
       )}
-      {transferModalOpen && accounts && (
-        <AddTransferModal visible={transferModalOpen} accounts={accounts} onClose={() => setTransferModalOpen(false)} />
+      {transferModalOpen && accounts && categories && (
+        <AddTransferModal
+          visible={transferModalOpen}
+          accounts={accounts}
+          categories={categories.filter(({ account: categoryAccount }) => categoryAccount !== undefined)}
+          onClose={() => setTransferModalOpen(false)}
+        />
       )}
     </>
   );

@@ -6,25 +6,30 @@ export const accounts: Array<Account> = [
 ];
 
 const visaAccount = accounts[0];
+const cashAccount = accounts[1];
 
 export const categories: Array<Category> = [
-  { id: 1, label: "Food", type: "EXPENSES" },
-  { id: 2, label: "Healthcare", type: "EXPENSES" },
-  { id: 3, label: "Insurance", type: "EXPENSES" },
-  { id: 4, label: "Investments", type: "EXPENSES" },
-  { id: 5, label: "Housing", type: "EXPENSES" },
-  { id: 6, label: "Personal spendings", type: "EXPENSES" },
-  { id: 7, label: "Recreation & Entertainment", type: "EXPENSES" },
-  { id: 8, label: "Savings", type: "EXPENSES" },
-  { id: 9, label: "Transportation", type: "EXPENSES" },
-  { id: 10, label: "Utilities", type: "EXPENSES" },
-  { id: 11, label: "Salary", type: "INCOMES" },
-  { id: 12, label: "Gift", type: "INCOMES" },
-  { id: 13, label: "Refunds", type: "INCOMES" },
+  { id: 1, label: "From Visa", type: "INCOMES", account: cashAccount.id },
+  { id: 2, label: "To Visa", type: "EXPENSES", account: cashAccount.id },
+  { id: 3, label: "From Cash", type: "INCOMES", account: visaAccount.id },
+  { id: 4, label: "To Cash", type: "EXPENSES", account: visaAccount.id },
+  { id: 5, label: "Food", type: "EXPENSES" },
+  { id: 6, label: "Healthcare", type: "EXPENSES" },
+  { id: 7, label: "Insurance", type: "EXPENSES" },
+  { id: 8, label: "Investments", type: "EXPENSES" },
+  { id: 9, label: "Housing", type: "EXPENSES" },
+  { id: 10, label: "Personal spendings", type: "EXPENSES" },
+  { id: 11, label: "Recreation & Entertainment", type: "EXPENSES" },
+  { id: 12, label: "Savings", type: "EXPENSES" },
+  { id: 13, label: "Transportation", type: "EXPENSES" },
+  { id: 14, label: "Utilities", type: "EXPENSES" },
+  { id: 15, label: "Salary", type: "INCOMES" },
+  { id: 16, label: "Gift", type: "INCOMES" },
+  { id: 17, label: "Refunds", type: "INCOMES" },
 ];
 
-const foodCategory = categories[0];
-const entertainmentCategory = categories[6];
+const foodCategory = categories[4];
+const entertainmentCategory = categories[10];
 
 export const transactions: Array<Transaction> = [
   {

@@ -85,7 +85,7 @@ const transactionHandlers = [
   }),
   rest.post(`${API_URL}/transactions`, (req, res, ctx) => {
     const transaction = req.body as TransactionCreatePayload;
-    return res(ctx.status(201), ctx.json({ ...transaction, id: getRandomId() }));
+    return res(ctx.delay(500), ctx.status(201), ctx.json({ ...transaction, id: getRandomId() }));
   }),
   rest.patch(`${API_URL}/transactions/:id`, (req, res, ctx) => {
     const { id } = req.params;
