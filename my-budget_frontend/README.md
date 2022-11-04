@@ -1,6 +1,6 @@
-# My budget
+# Frontend
 
-Frontend part application of the budget application in React.
+Frontend part of the budget application written in React.
 
 - [File structure](#file-structure)
 - [Installation](#installation)
