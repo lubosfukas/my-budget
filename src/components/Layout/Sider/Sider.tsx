@@ -27,6 +27,8 @@ export const Sider = () => {
       newParams.set(ACCOUNT_KEY, data[0].id.toString());
       const period = timePeriods[0].id;
       if (period) newParams.set(PERIOD_KEY, period);
+      const date = new Date().toISOString();
+      if (date) newParams.set(TIME_KEY, date);
       setSearchParams(newParams);
     },
   });
