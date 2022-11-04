@@ -7,3 +7,6 @@ public
 
 # Ignore all HTML files:
 *.html
+
+package.json
+package-lock.json
