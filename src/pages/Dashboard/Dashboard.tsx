@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Spin, Table } from "antd";
+import { DatePickerProps, Spin, Table } from "antd";
 import classNames from "classnames";
 import { useSearchParams } from "react-router-dom";
 
 import { useFetchCategories, useFetchTransactions } from "../../hooks";
-import { ACCOUNT_KEY } from "../../utils/constants";
+import { ACCOUNT_KEY, PERIOD_KEY, TIME_KEY } from "../../utils/constants";
 import styles from "./Dashboard.module.less";
 
 const columns = [
@@ -41,6 +41,8 @@ export const Dashboard = () => {
 
   const [searchParams] = useSearchParams();
   const accountId = searchParams.get(ACCOUNT_KEY);
+  const period = searchParams.get(PERIOD_KEY);
+  const time = searchParams.get(TIME_KEY);
 
   const {
     data,
@@ -50,6 +52,8 @@ export const Dashboard = () => {
     limit: 10,
     page: currentPage,
     accountId: accountId ? parseInt(accountId, 10) : undefined,
+    date: time ?? undefined,
+    period: (period as DatePickerProps["picker"]) ?? undefined,
   });
   const { data: categories, isLoading: isLoadingCategories } = useFetchCategories();
 

@@ -1,3 +1,5 @@
+import { DatePickerProps } from "antd";
+
 export type Account = {
   id: number;
   initialBalance: number;
@@ -29,7 +31,9 @@ export type Transaction = {
 export type TransactionRequestConfig = {
   page: number;
   accountId?: Account["id"];
+  date?: string;
   limit?: number;
+  period?: DatePickerProps["picker"];
 };
 
 export type TransactionListResponse = {
@@ -37,7 +41,9 @@ export type TransactionListResponse = {
   selectionSettings: {
     limit: number;
     page: number | null;
-    accountId?: Account["id"] | null;
+    accountId: Account["id"] | null;
+    date: string | null;
+    period: DatePickerProps["picker"] | null;
   };
   total: number;
 };

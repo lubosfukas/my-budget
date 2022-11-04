@@ -1,3 +1,5 @@
+import { DatePickerProps } from "antd";
+import moment from "moment";
 import { rest } from "msw";
 
 import {
@@ -58,22 +60,45 @@ const transactionHandlers = [
     const limitParam = req.url.searchParams.get("limit");
     const pageParam = req.url.searchParams.get("page");
     const accountParam = req.url.searchParams.get("account");
+    const dateParam = req.url.searchParams.get("date");
+    const periodParam = req.url.searchParams.get("period") as DatePickerProps["picker"] | null;
 
     let accountTransactions = [...transactions];
     const accountId = accountParam ? parseInt(accountParam, 10) : null;
     if (accountId) accountTransactions = accountTransactions.filter(({ account }) => account === accountId);
 
+    let filteredTransactions = [...accountTransactions];
+    if (periodParam) {
+      const dateMoment = moment(dateParam);
+      switch (periodParam) {
+        case "date":
+          filteredTransactions = filteredTransactions.filter(({ date }) => moment(date).day() === dateMoment.day());
+          break;
+        case "week":
+          filteredTransactions = filteredTransactions.filter(({ date }) => moment(date).week() === dateMoment.week());
+          break;
+        case "month":
+          filteredTransactions = filteredTransactions.filter(({ date }) => moment(date).month() === dateMoment.month());
+          break;
+        case "year":
+          filteredTransactions = filteredTransactions.filter(({ date }) => moment(date).year() === dateMoment.year());
+          break;
+        default:
+          filteredTransactions = [...accountTransactions];
+      }
+    }
+
     const limit = limitParam ? parseInt(limitParam, 10) : 10;
     const page = pageParam ? parseInt(pageParam, 10) : 0;
     const offset = page * limit;
-    const selectedTransactions = accountTransactions.slice(offset, offset + limit);
+    const selectedTransactions = filteredTransactions.slice(offset, offset + limit);
 
     return res(
       ctx.delay(500),
       ctx.status(200),
       ctx.json({
         selectionSettings: { limit, page, account: accountId },
-        total: accountTransactions.length,
+        total: filteredTransactions.length,
         transactions: selectedTransactions,
       })
     );

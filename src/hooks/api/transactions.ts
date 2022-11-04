@@ -9,9 +9,11 @@ export const useFetchTransactions = (options?: TransactionRequestConfig) => {
   const page = options?.page ?? 0;
   let url = `${API_URL}/transactions?limit=${limit}&page=${page}`;
   if (options?.accountId) url = url.concat(`&account=${options.accountId}`);
+  if (options?.date) url = url.concat(`&date=${options.date}`);
+  if (options?.period) url = url.concat(`&period=${options.period}`);
 
   return useQuery<TransactionListResponse, AxiosResponse<TransactionListResponse, AxiosError>, TransactionListResponse>(
-    ["transactions", limit, page, options?.accountId],
+    ["transactions", limit, page, options?.accountId, options?.date, options?.period],
     async () => {
       const { data: response } = await axios.get<TransactionListResponse>(url);
 
