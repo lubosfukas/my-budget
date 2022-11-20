@@ -1,18 +1,18 @@
 const { getRandomId } = require("../utils/helpers");
-const { accounts } = require("../utils/mockedData");
+const { categories } = require("../utils/mockedData");
 
 const express = require("express");
 const router = express.Router();
 
 router.get("/", function (_, res) {
-  res.status(200).send(accounts);
+  res.status(200).send(categories.filter(({ account }) => account === undefined));
 });
 
 router.get("/:id", function (req, res) {
   const { id } = req.params;
-  const account = accounts.find(({ id: accountId }) => id === accountId.toString());
+  const category = categories.find(({ id: categoryId }) => id === categoryId.toString());
 
-  if (account) res.status(200).send(account);
+  if (category) res.status(200).send(category);
   else res.sendStatus(404);
 });
 
@@ -23,9 +23,9 @@ router.post("/", function (req, res) {
 router.patch("/:id", function (req, res) {
   const { id } = req.params;
   const body = req.body;
-  const account = accounts.find(({ id: accountId }) => id === accountId.toString());
+  const category = categories.find(({ id: categoryId }) => id === categoryId.toString());
 
-  if (account) res.status(200).send({ ...account, ...body });
+  if (category) res.status(200).send({ ...category, ...body });
   else res.sendStatus(404);
 });
 
