@@ -18,7 +18,7 @@ accountSchema.set("toJSON", {
   },
 });
 
-const Account = mongoose.model("Model", accountSchema, "account");
+const Account = mongoose.model("account", accountSchema);
 
 router.get("/", async function (_, res) {
   const accounts = await Account.find({});
