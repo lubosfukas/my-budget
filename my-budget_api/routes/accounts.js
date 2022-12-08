@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 
+const { getCustomErrorMessage } = require("../utils/helpers");
+
 const router = express.Router();
 const { Schema } = mongoose;
 
@@ -27,11 +29,6 @@ accountSchema.set("toJSON", {
 });
 
 const Account = mongoose.model("account", accountSchema);
-
-const getCustomErrorMessage = (errorMessage) => {
-  const arr = errorMessage.split(":");
-  return arr[arr.length - 1];
-};
 
 router.get("/", async function (_, res) {
   const accounts = await Account.find({});
