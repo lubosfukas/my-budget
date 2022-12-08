@@ -4,6 +4,8 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
 const indexRouter = require("./routes/index");
 const accountsRouter = require("./routes/accounts");
@@ -43,5 +45,13 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
+
+async function main() {
+  await mongoose.connect(
+    `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.t7czoja.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
+  );
+}
+
+main().catch((err) => console.log(err));
 
 module.exports = app;
