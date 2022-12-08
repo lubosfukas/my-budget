@@ -1,36 +1,55 @@
-const { getRandomId } = require("../utils/helpers");
-const { categories } = require("../utils/mockedData");
-
 const express = require("express");
+const mongoose = require("mongoose");
+
 const router = express.Router();
+const { Schema, Types } = mongoose;
 
-router.get("/", function (_, res) {
-  res.status(200).send(categories.filter(({ account }) => account === undefined));
+const categorySchema = new Schema({
+  account: Types.ObjectId,
+  label: "string",
+  type: {
+    type: "string",
+    enum: ["Expenses", "Incomes"],
+  },
+});
+categorySchema.virtual("id").get(function () {
+  return this._id.toHexString();
+});
+categorySchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false,
+  transform: function (_, res) {
+    delete res._id;
+  },
 });
 
-router.get("/:id", function (req, res) {
+const Category = mongoose.model("category", categorySchema);
+
+router.get("/", async function (_, res) {
+  await Category.find({})
+    .where("account")
+    .equals(undefined)
+    .then((categories) => res.status(200).send(categories));
+});
+
+router.get("/:id", async function (req, res) {
   const { id } = req.params;
-  const category = categories.find(({ id: categoryId }) => id === categoryId.toString());
-
-  if (category) res.status(200).send(category);
-  else res.sendStatus(404);
+  await Category.findById(id).then((category) => res.status(200).send(category));
 });
 
-router.post("/", function (req, res) {
-  res.status(201).send({ ...req.body, id: getRandomId() });
+router.post("/", async function (req, res) {
+  await Category.create(req.body).then((category) => res.status(201).send(category));
 });
 
-router.patch("/:id", function (req, res) {
+router.patch("/:id", async function (req, res) {
   const { id } = req.params;
-  const body = req.body;
-  const category = categories.find(({ id: categoryId }) => id === categoryId.toString());
-
-  if (category) res.status(200).send({ ...category, ...body });
-  else res.sendStatus(404);
+  await Category.findByIdAndUpdate(id, req.body, { returnDocument: "after" }).then((category) =>
+    res.status(200).send(category)
+  );
 });
 
-router.delete("/:id", function (_, res) {
-  res.sendStatus(204);
+router.delete("/:id", async function (req, res) {
+  await Category.findByIdAndRemove(req.params.id).then(() => res.sendStatus(204));
 });
 
 module.exports = router;
