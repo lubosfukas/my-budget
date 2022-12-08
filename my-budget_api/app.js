@@ -5,7 +5,10 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
-require("dotenv").config();
+const dotenv = require("dotenv");
+
+mongoose.set("strictQuery", false);
+dotenv.config();
 
 const indexRouter = require("./routes/index");
 const accountsRouter = require("./routes/accounts");
@@ -46,6 +49,7 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
+// mongodb connection
 async function main() {
   await mongoose.connect(
     `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.t7czoja.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
