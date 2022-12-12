@@ -1,77 +1,115 @@
-const { getRandomId } = require("../utils/helpers");
-const { transactions } = require("../utils/mockedData");
-
 const express = require("express");
 const moment = require("moment");
+const mongoose = require("mongoose");
+
+const { getCustomErrorMessage } = require("../utils/helpers");
+
 const router = express.Router();
+const { model, Schema, Types } = mongoose;
+
+const transactionSchema = new Schema(
+  {
+    account: {
+      type: Types.ObjectId,
+      required: [true, "Account is required."],
+    },
+    balance: {
+      type: "number",
+      required: [true, "Balance is required."],
+    },
+    category: {
+      type: Types.ObjectId,
+      required: [true, "Category is required."],
+      date: "dat",
+    },
+    note: "string",
+  },
+  { timestamps: { createdAt: true, updatedAt: false } }
+);
+transactionSchema.virtual("id").get(function () {
+  return this._id.toHexString();
+});
+transactionSchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false,
+  transform: function (_, res) {
+    delete res._id;
+  },
+});
+
+const Transaction = model("transaction", transactionSchema);
 
 router.get("/", function (req, res) {
   const limitParam = req.query.limit;
   const pageParam = req.query.page;
-  const accountParam = req.query.account;
   const dateParam = req.query.date;
   const periodParam = req.query.period;
 
-  let accountTransactions = [...transactions];
-  const accountId = accountParam ? parseInt(accountParam, 10) : null;
-  if (accountId) accountTransactions = accountTransactions.filter(({ account }) => account === accountId);
+  let start = new Date();
+  let end = new Date();
 
-  let filteredTransactions = [...accountTransactions];
-  if (periodParam) {
-    const dateMoment = moment(dateParam);
-    switch (periodParam) {
-      case "date":
-        filteredTransactions = filteredTransactions.filter(({ date }) => moment(date).day() === dateMoment.day());
-        break;
-      case "week":
-        filteredTransactions = filteredTransactions.filter(({ date }) => moment(date).week() === dateMoment.week());
-        break;
-      case "month":
-        filteredTransactions = filteredTransactions.filter(({ date }) => moment(date).month() === dateMoment.month());
-        break;
-      case "year":
-        filteredTransactions = filteredTransactions.filter(({ date }) => moment(date).year() === dateMoment.year());
-        break;
-      default:
-        filteredTransactions = [...accountTransactions];
-    }
+  switch (periodParam) {
+    case "week":
+      start = moment(dateParam).startOf("week").toDate();
+      end = moment(dateParam).endOf("week").toDate();
+      break;
+    case "month":
+      start = moment(dateParam).startOf("month").toDate();
+      end = moment(dateParam).endOf("month").toDate();
+      break;
+    case "year":
+      start = moment(dateParam).startOf("year").toDate();
+      end = moment(dateParam).endOf("year").toDate();
+      break;
+    default:
+      start = moment(dateParam).startOf("day").toDate();
+      end = moment(dateParam).endOf("day").toDate();
+      break;
   }
 
-  const limit = limitParam ? parseInt(limitParam, 10) : 10;
-  const page = pageParam ? parseInt(pageParam, 10) : 0;
-  const offset = page * limit;
-  const selectedTransactions = filteredTransactions.slice(offset, offset + limit);
-
-  res.status(200).send({
-    selectionSettings: { limit, page, account: accountId },
-    total: filteredTransactions.length,
-    transactions: selectedTransactions,
-  });
+  Transaction.find({
+    createdAt: {
+      $gte: start,
+      $lte: end,
+    },
+  })
+    .where("account")
+    .equals(req.query.account)
+    .limit(limitParam)
+    .skip(limitParam * pageParam)
+    .sort("createdAt")
+    .exec((err, transactions) =>
+      err
+        ? res.status(400).send(getCustomErrorMessage(err.message))
+        : res.status(200).send({
+            transactions,
+            selectionSettings: { limit: limitParam, page: pageParam, total: transactions.length },
+          })
+    );
 });
 
-router.get("/:id", function (req, res) {
-  const { id } = req.params;
-  const transaction = transactions.find(({ id: transactionId }) => id === transactionId.toString());
-
-  if (transaction) res.status(200).send(transaction);
-  else res.sendStatus(404);
+router.get("/:id", async function (req, res) {
+  await Transaction.findById(req.params.id).then((transaction) =>
+    transaction ? res.status(200).send(transaction) : res.sendStatus(404)
+  );
 });
 
-router.post("/", function (req, res) {
-  res.status(201).send({ ...req.body, id: getRandomId() });
+router.post("/", async function (req, res) {
+  await Transaction.create(req.body)
+    .then((transaction) => res.status(201).send(transaction))
+    .catch(({ message }) => res.status(400).send(getCustomErrorMessage(message)));
 });
 
-router.patch("/:id", function (req, res) {
-  const { id } = req.params;
-  const body = req.body;
-  const transaction = transactions.find(({ id: transactionId }) => id === transactionId.toString());
-
-  if (transaction) res.status(200).send({ ...transaction, ...body });
-  else res.sendStatus(404);
+router.patch("/:id", async function (req, res) {
+  await Transaction.findByIdAndUpdate(req.params.id, req.body, { returnDocument: "after" })
+    .then((transaction) => (transaction ? res.status(200).send(transaction) : res.sendStatus(404)))
+    .catch(({ message }) => res.status(400).send(getCustomErrorMessage(message)));
 });
 
-router.delete("/:id", function (_, res) {
-  res.sendStatus(204);
+router.delete("/:id", async function (_, res) {
+  await Transaction.findByIdAndRemove(req.params.id).then((transaction) =>
+    transaction ? res.sendStatus(204) : res.sendStatus(404)
+  );
 });
 
 module.exports = router;
